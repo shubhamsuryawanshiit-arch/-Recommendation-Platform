@@ -1,0 +1,17 @@
+node_modules/
+.vercel/
+client/dist/
+server/.env
+**/.env
+ml-service/.venv/
+__pycache__/
+ml-service/dataset/ml-latest-small/
+ml-service/dataset/ml-latest-small.zip
+ml-service/dataset/watchwise-ratings.json
+ml-service/results/*.json
+ml-service/results/*.csv
+ml-service/results/*.jsonl
+client/public/assets/movies/posters/*
+client/public/assets/movies/backdrops/*
+!client/public/assets/movies/posters/.gitkeep
+!client/public/assets/movies/backdrops/.gitkeep

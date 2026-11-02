@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Movie backdrop unavailable">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#241b3a"/><stop offset=".52" stop-color="#121116"/><stop offset="1" stop-color="#08080a"/></linearGradient><radialGradient id="glow"><stop stop-color="#8b5cf6" stop-opacity=".38"/><stop offset="1" stop-color="#8b5cf6" stop-opacity="0"/></radialGradient></defs>
+  <path fill="url(#bg)" d="M0 0h1600v900H0z"/><ellipse cx="1080" cy="330" rx="590" ry="510" fill="url(#glow)"/>
+</svg>

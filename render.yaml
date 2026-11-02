@@ -1,0 +1,60 @@
+services:
+  - type: web
+    name: watchwise-api
+    runtime: node
+    plan: 0.5c-512mb
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    disk:
+      name: watchwise-local-images
+      mountPath: /opt/render/project/src/server/storage/movies
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - fromGroup: watchwise-secrets
+      - key: CLIENT_ORIGIN
+        sync: false
+      - key: ML_SERVICE_URL
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: IMAGE_UPLOAD_DIR
+        value: /opt/render/project/src/server/storage/movies
+      - key: IMAGE_MAPPING_FILE
+        value: /opt/render/project/src/server/storage/movieImageMapping.json
+  - type: web
+    name: watchwise-recommender
+    runtime: python
+    plan: 0.5c-512mb
+    rootDir: .
+    buildCommand: pip install -r ml-service/requirements.txt
+    startCommand: python -m uvicorn ml_service.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    disk:
+      name: watchwise-ml-data
+      mountPath: /opt/render/project/src/ml-service/dataset
+      sizeGB: 1
+    envVars:
+      - key: PYTHONPATH
+        value: .
+      - key: DATASET_DIR
+        value: /opt/render/project/src/ml-service/dataset/ml-latest-small
+      - key: USER_RATINGS_FILE
+        value: /opt/render/project/src/ml-service/dataset/watchwise-ratings.json
+      - key: RESULTS_DIR
+        value: /opt/render/project/src/ml-service/dataset/results
+      - fromGroup: watchwise-secrets
+envVarGroups:
+  - name: watchwise-secrets
+    envVars:
+      - key: ML_SERVICE_TOKEN
+        generateValue: true

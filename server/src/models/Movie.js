@@ -1,0 +1,5 @@
+import mongoose from 'mongoose';
+const localPath = { type: String, default: '', validate: { validator: value => !value || value.startsWith('/assets/movies/'), message: 'Movie images must use local asset paths' } };
+const schema = new mongoose.Schema({ movieLensId: { type: Number, unique: true, sparse: true }, title: { type: String, required: true, index: 'text' }, overview: { type: String, default: '' }, genres: { type: [String], default: [], index: true }, releaseYear: { type: Number, index: true }, posterPath: localPath, backdropPath: localPath, castImagePaths: [{ type: String, validate: { validator: value => value.startsWith('/assets/movies/'), message: 'Cast images must use local asset paths' } }], averageRating: { type: Number, default: 0, min: 0, max: 5 }, ratingCount: { type: Number, default: 0 }, datasetAverageRating: { type: Number, default: 0 }, datasetRatingCount: { type: Number, default: 0 }, popularity: { type: Number, default: 0 }, runtime: Number }, { timestamps: true });
+schema.index({ averageRating: -1, ratingCount: -1 });
+export default mongoose.model('Movie', schema);
