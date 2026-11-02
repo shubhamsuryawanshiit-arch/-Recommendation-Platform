@@ -260,7 +260,7 @@ Database concepts to explain using the code:
 - **Indexes:** title text search, genre/year filtering, rating order, user/movie uniqueness, and viewing history order have indexes in the model files. Indexes speed common reads while taking some extra disk on writes.
 - **Aggregation:** rating summaries use `$group` to calculate averages/counts. Admin statistics use `$group`, `$lookup`, and `$unwind` to combine relationship and movie records.
 - **Validation:** Mongoose and Zod check required fields, email format, image paths, and rating bounds before data is saved.
-- **Security:** passwords are bcrypt hashes; API responses never contain password fields. JWTs identify a signed-in user, and an admin middleware checks roles.
+- **Security:** passwords are bcrypt hashes; API responses never contain password fields. Signed JWT sessions use HTTP-only, same-site cookies, and admin operations check roles on the server.
 - **Consistency trade-off:** a user rating and the updated movie summary are two writes. For a larger deployment, move those writes to a MongoDB transaction on a replica set or derive summaries asynchronously. The MovieLens dataset summary is kept separately from WatchWise ratings so one account's rating does not overwrite the source dataset average.
 
 Useful code to read in order: `server/src/models/User.js`, `Movie.js`, `Rating.js`, `Watchlist.js`; then `server/src/routes/api.js`; finally `server/scripts/importMovieLens.js`.
@@ -302,7 +302,7 @@ Do not claim a live deployment until Vercel reports a successful build and the A
 - **MongoDB server selection timeout:** verify the Atlas database user/password, IP allowlist, connection string, and network access.
 - **`Dataset unavailable`:** run the dataset download command once and inspect the four CSV files in `ml-service/dataset/ml-latest-small/`.
 - **No posters:** this is expected until an admin adds properly licensed local artwork; placeholder images are intentional.
-- **No recommendations:** confirm the ML service health page and shared token, then rate multiple catalog movies.
+- **No recommendations:** confirm the movie catalog is imported and try rating several movies. The Vercel API uses a labeled popularity fallback when rating overlap is too sparse.
 - **Port already in use:** stop the previous server with `Ctrl+C` or change that service's port and its corresponding URL setting.
 
 ## 18. Academic references and data credit
