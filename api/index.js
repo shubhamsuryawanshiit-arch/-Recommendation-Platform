@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import app, { connectDatabase } from '../server/src/app.js';
 
 export default async function handler(req, res) {
